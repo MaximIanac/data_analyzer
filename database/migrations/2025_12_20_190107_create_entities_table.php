@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('external_id')->nullable();
             $table->string('title');
             $table->string('source', 50);
-            $table->string('type', 50)->comment("car, flat...");
+            $table->string('filter_type', 50)->comment("flat_default, ...");
             $table->schemalessAttributes('data');
             $table->timestamp('external_last_update')->nullable();
             $table->timestamps();

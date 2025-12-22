@@ -2,8 +2,8 @@
 
 namespace App\Services\Sources\Enums;
 
-enum SourceEntityType: string
+enum EntityFilter: string
 {
-    case FLAT = 'flat';
+    case FLAT_DEFAULT = 'flat_default';
     case CAR = 'car';
 }

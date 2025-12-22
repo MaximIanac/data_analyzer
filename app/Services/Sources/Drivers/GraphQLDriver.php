@@ -66,8 +66,6 @@ class GraphQLDriver extends BaseDriver
             }
 
             return collect($json);
-
-
         } catch (Throwable $e) {
             throw new RuntimeException(
             'GraphQL call failed: ' . $e->getMessage(),

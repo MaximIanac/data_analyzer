@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\EntityCreated;
 use App\Jobs\SendMessageToTelegram;
-use App\Services\Telegram\Formatter;
+use App\Services\Sources\Filters\Factories\FormatterFactory;
 
 class SendCreatedEntityListener
 {
@@ -21,10 +21,11 @@ class SendCreatedEntityListener
      */
     public function handle(EntityCreated $event): void
     {
-        $f = $event->entity;
+        $entity = $event->entity;
 
-        SendMessageToTelegram::dispatch(
-            Formatter::makeMarkdown($f)
-        );
+        $formatter = (new FormatterFactory())->make($entity->source, $entity->filter_type->value, $entity);
+        $message = $formatter->get();
+
+        SendMessageToTelegram::dispatch($message);
     }
 }

@@ -6,6 +6,7 @@ use App\Services\Sources\Clients\Marketplace999\Adapters\FlatDataAdapter;
 use App\Services\Sources\Clients\Marketplace999\Cast\MarketplaceDateCast;
 use App\Services\Sources\Configs\Marketplace999Config;
 use App\Services\Sources\Data\EntityData;
+use App\Services\Sources\Enums\EntityFilter;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
@@ -44,10 +45,11 @@ class FlatData extends Data
     /**
      * Transform data to general DTO
      *
+     * @param EntityFilter $filter
      * @return EntityData
      */
-    public function toGeneral(): EntityData
+    public function toGeneral(EntityFilter $filter): EntityData
     {
-        return FlatDataAdapter::toGeneral($this);
+        return FlatDataAdapter::toGeneral($this, $filter);
     }
 }

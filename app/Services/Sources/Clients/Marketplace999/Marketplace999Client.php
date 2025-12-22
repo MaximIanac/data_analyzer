@@ -5,7 +5,9 @@ namespace App\Services\Sources\Clients\Marketplace999;
 use App\Services\Sources\Clients\BaseClient;
 use App\Services\Sources\Clients\Marketplace999\Data\FlatData;
 use App\Services\Sources\Data\EntityData;
+use App\Services\Sources\Enums\EntityFilter;
 use App\Services\Sources\Enums\SourceClientType;
+use App\Services\Sources\Filters\Factories\VariableFactory;
 use Illuminate\Support\Collection;
 
 class Marketplace999Client extends BaseClient
@@ -28,15 +30,17 @@ class Marketplace999Client extends BaseClient
     }
 
     /**
-     * @param array $params
+     * @param EntityFilter $filter
+     * @param int $skip
      * @return Collection<EntityData>
      */
-    public function flatsSearch(array $params): Collection
+    public function flatsSearch(EntityFilter $filter, int $skip): Collection
     {
+        $variableClass = (new VariableFactory)->make($this->type, $filter->value);
         $data = $this->execute(
             'searchAds',
             'FlatsSearch',
-            $params,
+            $variableClass::base($this->config->get('limit'), $skip),
         );
 
         $ads = $data["data"]["searchAds"]["ads"] ?? [];
@@ -44,7 +48,7 @@ class Marketplace999Client extends BaseClient
 
         return FlatData::collect($ads, Collection::class)
             ->map(
-                fn (FlatData $flatData) => $flatData->toGeneral()
+                fn (FlatData $flatData) => $flatData->toGeneral($filter)
             );
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Sources\Clients\Marketplace999\Filters;
+namespace App\Services\Sources\Clients\Marketplace999\Filters\Variables;
 
-class FlatsVariables
+class FlatDefaultVariables
 {
     public static function base(int $limit, int $skip): array
     {

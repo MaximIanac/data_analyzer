@@ -3,9 +3,11 @@
 namespace App\Services\Sources\Clients\Marketplace999\Actions;
 
 use App\Services\Sources\Clients\BaseClient;
-use App\Services\Sources\Clients\Marketplace999\Filters\FlatsVariables;
+use App\Services\Sources\Clients\Marketplace999\Filters\Variables\FlatDefaultVariables;
 use App\Services\Sources\Clients\Marketplace999\Marketplace999Client;
 use App\Services\Sources\Drivers\GraphQLDriver;
+use App\Services\Sources\Enums\EntityFilter;
+use App\Services\Sources\Filters\Factories\VariableFactory;
 use App\Services\Sources\Repository\EntityRepository;
 
 class SearchFlatsAction
@@ -24,7 +26,8 @@ class SearchFlatsAction
     {
         foreach ($this->paginate() as $skip) {
             $result = $this->client->flatsSearch(
-                FlatsVariables::base($this->limit, $skip)
+                EntityFilter::FLAT_DEFAULT,
+                $skip
             );
 
             if (!isset($this->count)) {

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Services\Sources\Enums\SourceClientType;
-use App\Services\Sources\Enums\SourceEntityType;
+use App\Services\Sources\Enums\EntityFilter;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
@@ -13,7 +13,7 @@ class Entity extends Model
 
     protected $casts = [
         "source" => SourceClientType::class,
-        "type" => SourceEntityType::class,
+        "filter_type" => EntityFilter::class,
         "data" => SchemalessAttributes::class,
     ];
 }
