@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['external_id', 'source']);
-            $table->index(['source', 'type']);
+            $table->index(['source', 'filter_type']);
             $table->index(['title']);
         });
     }
