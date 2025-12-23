@@ -36,7 +36,7 @@ abstract class BaseConfig implements ConfigInterface
     protected function getDefaults(): array
     {
         return [
-            "limit" => 50,
+            "limit" => 20,
             'timeout' => 30,
             'cache_ttl' => 300,
             'headers' => [

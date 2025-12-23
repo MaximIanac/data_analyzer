@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\EntityCreated;
+use App\Events\EntityUpdated;
 use App\Jobs\SendMessageToTelegram;
 use App\Services\Sources\Filters\Factories\FormatterFactory;
 
-class SendCreatedEntityListener
+class SendUpdatedEntityListener
 {
     /**
      * Create the event listener.
@@ -19,14 +19,18 @@ class SendCreatedEntityListener
     /**
      * Handle the event.
      */
-    public function handle(EntityCreated $event): void
+    public function handle(EntityUpdated $event): void
     {
         $entity = $event->entity;
+        $changes = $event->changes;
+        $original = $event->original;
 
         $formatter = (new FormatterFactory())->make(
             $entity->source,
             $entity->filter_type->value,
-            $entity
+            $entity,
+            $changes,
+            $original,
         );
 
         $message = $formatter->get();

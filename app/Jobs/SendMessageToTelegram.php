@@ -29,6 +29,7 @@ class SendMessageToTelegram implements ShouldQueue
         sleep(rand(3, 4));
         try {
             $response = Telegraph::markdown($this->message)->send();
+
             if (!$response->ok()) {
                 Log::error('Telegram message failed', ['response' => $response]);
             }

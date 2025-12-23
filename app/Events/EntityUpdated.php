@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Entity;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,7 +18,11 @@ class EntityUpdated
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(
+        public Entity $entity,
+        public array $changes,
+        public array $original,
+    )
     {
         //
     }
