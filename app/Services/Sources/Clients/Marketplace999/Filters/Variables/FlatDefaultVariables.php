@@ -30,7 +30,7 @@ class FlatDefaultVariables
                     [
                         'filterId' => 30,
                         'features' => [
-                            ['featureId' => 241, 'optionIds' => [893]],
+                            ['featureId' => 241, 'optionIds' => [893, 894]],
                         ],
                     ],
                     [
