@@ -4,7 +4,9 @@ namespace App\Listeners;
 
 use App\Events\EntityUpdated;
 use App\Jobs\SendMessageToTelegram;
+use App\Services\Sources\Clients\Marketplace999\Filters\Formatters\FlatDefaultFormatter;
 use App\Services\Sources\Filters\Factories\FormatterFactory;
+use Illuminate\Support\Facades\Log;
 
 class SendUpdatedEntityListener
 {
@@ -25,6 +27,7 @@ class SendUpdatedEntityListener
         $changes = $event->changes;
         $original = $event->original;
 
+        /** @var FlatDefaultFormatter $formatter */
         $formatter = (new FormatterFactory())->make(
             $entity->source,
             $entity->filter_type->value,
@@ -32,6 +35,17 @@ class SendUpdatedEntityListener
             $changes,
             $original,
         );
+
+        if (!$formatter->hasWatchedChanges()) {
+            return;
+        }
+
+        Log::channel('entity')->debug('[{source}][{filter_type}] Watched changes were fixed', [
+            'entity_id'   => $entity->id,
+            'source'      => $entity->source ?? null,
+            'filter_type' => $entity->filter_type ?? null,
+            'changes'     => $entity->getChanges(),
+        ]);
 
         $message = $formatter->get();
 

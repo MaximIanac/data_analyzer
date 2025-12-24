@@ -57,14 +57,6 @@ abstract class BaseFormatter implements FormatterInterface
     abstract protected function processData(): static;
 
     /**
-     * Check if any watched fields were changed.
-     */
-    protected function hasWatchedChanges(): bool
-    {
-        return (bool) array_intersect_key($this->changes, array_flip($this->watch));
-    }
-
-    /**
      * Get old/new values for a changed field.
      */
     protected function diff(string $field): ?stdClass
@@ -131,6 +123,14 @@ abstract class BaseFormatter implements FormatterInterface
             $diff->old,
             $diff->new
         );
+    }
+
+    /**
+     * Check if any watched fields were changed.
+     */
+    public function hasWatchedChanges(): bool
+    {
+        return (bool) array_intersect_key($this->changes, array_flip($this->watch));
     }
 
     /**
