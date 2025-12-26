@@ -33,6 +33,8 @@ class FlatData extends Data
         public ?string $floor,
         #[MapInputName('totalFloors.value.translated')]
         public ?string $totalFloors,
+        #[MapInputName('owner.login')]
+        public ?string $owner,
 
         #[WithCast(MarketplaceDateCast::class)]
         public Carbon|string|null $reseted,

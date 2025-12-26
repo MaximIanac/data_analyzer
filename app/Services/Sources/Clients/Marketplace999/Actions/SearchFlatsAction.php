@@ -2,24 +2,25 @@
 
 namespace App\Services\Sources\Clients\Marketplace999\Actions;
 
+use App\Services\Pipelines\EntityProcessing\FilterDuplicatesPipe;
+use App\Services\Pipelines\EntityProcessing\StoreEntitiesPipe;
 use App\Services\Sources\Clients\BaseClient;
-use App\Services\Sources\Clients\Marketplace999\Filters\Variables\FlatDefaultVariables;
 use App\Services\Sources\Clients\Marketplace999\Marketplace999Client;
+use App\Services\Sources\Configs\BaseConfig;
 use App\Services\Sources\Drivers\GraphQLDriver;
 use App\Services\Sources\Enums\EntityFilter;
-use App\Services\Sources\Filters\Factories\VariableFactory;
-use App\Services\Sources\Repository\EntityRepository;
+use Illuminate\Pipeline\Pipeline;
 
 class SearchFlatsAction
 {
     private int|null $count;
-    private int $limit;
     private BaseClient $client;
+    private BaseConfig $config;
 
     public function __construct()
     {
         $this->client = new Marketplace999Client(GraphQLDriver::make());
-        $this->limit = $this->client->getConfig()->get("limit");
+        $this->config = $this->client->getConfig();
     }
 
     public function handle(): void
@@ -34,7 +35,15 @@ class SearchFlatsAction
                 $this->count = $this->client->getEntitiesCount();
             }
 
-            (new EntityRepository())->storeMany($result);
+            app(Pipeline::class)
+                ->send($result)
+                ->through([
+                    FilterDuplicatesPipe::make(
+                        $this->config->getFieldsToCheck(EntityFilter::FLAT_DEFAULT)
+                    ),
+                    StoreEntitiesPipe::class,
+                ])
+                ->thenReturn();
 
             sleep(rand(10, 30));
         }
@@ -49,7 +58,7 @@ class SearchFlatsAction
             $isFirstIteration = false;
 
             yield $skip;
-            $skip += $this->limit;
+            $skip += $this->config->get('limit');
         }
     }
 }

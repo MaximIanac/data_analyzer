@@ -3,12 +3,21 @@
 namespace App\Services\Sources\Configs;
 
 use App\Services\Sources\Contracts\ConfigInterface;
+use App\Services\Sources\Enums\EntityFilter;
 
 abstract class BaseConfig implements ConfigInterface
 {
-    public string $baseApiUrl;
     public static string $baseUrl;
+
+    public string $baseApiUrl;
+
     protected array $config = [];
+
+    /**
+     * Fields to check for duplicates per entity type
+     * @var array<string, array<string>>
+     */
+    protected array $fieldsToDuplicateCheck = [];
 
     public function __construct(array $config = [])
     {
@@ -31,6 +40,11 @@ abstract class BaseConfig implements ConfigInterface
     public function all(): array
     {
         return $this->config;
+    }
+
+    public function getFieldsToCheck(EntityFilter $filter): array
+    {
+        return $this->fieldsToDuplicateCheck[$filter->value] ?? [];
     }
 
     protected function getDefaults(): array
