@@ -127,13 +127,22 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        "entity" => [
-            'driver' => 'single',
-            'path' => storage_path('logs/sources/entities.log'),
-            'level' => 'debug',
-            'replace_placeholders' => true,
-        ],
+        "sources" => [
+            "entity" => [
+                'driver' => 'single',
+                'path' => storage_path('logs/sources/entities.log'),
+                'level' => 'debug',
+                'replace_placeholders' => true,
+            ],
 
+            'command' => [
+                'driver' => 'daily',
+                'days' => env('LOG_DAILY_DAYS', 7),
+                'path' => storage_path('logs/sources/commands.log'),
+                'level' => 'info',
+                'replace_placeholders' => true,
+            ],
+        ],
     ],
 
 ];

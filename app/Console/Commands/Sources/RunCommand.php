@@ -35,9 +35,11 @@ class RunCommand extends Command
             (new SearchFlatsAction())->handle();
 
             $this->info('✔ Flats source finished successfully');
+
+            Log::channel("sources.command")->info('Flats source finished successfully');
         } catch (\Throwable $e) {
             $this->error('✖ Flats source failed');
-            Log::error('[sources] Flats source error', [
+            Log::channel("sources.command")->error('[sources] Flats source error', [
                 'message' => $e->getMessage(),
                 'trace'   => $e->getTraceAsString(),
             ]);

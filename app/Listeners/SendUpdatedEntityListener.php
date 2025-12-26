@@ -40,7 +40,7 @@ class SendUpdatedEntityListener
             return;
         }
 
-        Log::channel('entity')->debug('[{source}][{filter_type}] Watched changes were fixed', [
+        Log::channel('sources.entity')->debug('[{source}][{filter_type}] Watched changes were fixed', [
             'entity_id'   => $entity->id,
             'source'      => $entity->source ?? null,
             'filter_type' => $entity->filter_type ?? null,

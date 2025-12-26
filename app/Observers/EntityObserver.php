@@ -22,15 +22,11 @@ class EntityObserver
      */
     public function updated(Entity $entity): void
     {
-        if ($entity->wasRecentlyCreated) {
-            return;
-        }
-
-        Log::channel('entity')->debug('[{source}][{filter_type}] Entity update event was called', [
-            'entity_id'   => $entity->id,
-            'source'      => $entity->source ?? null,
-            'filter_type' => $entity->filter_type ?? null,
-        ]);
+//        Log::channel('sources.entity')->debug('[{source}][{filter_type}] Entity update event was called', [
+//            'entity_id'   => $entity->id,
+//            'source'      => $entity->source ?? null,
+//            'filter_type' => $entity->filter_type ?? null,
+//        ]);
 
         event(new EntityUpdated(
             $entity,
