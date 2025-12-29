@@ -11,6 +11,6 @@ class Marketplace999Config extends BaseConfig
     public string $baseApiUrl = "https://999.md/graphql";
 
     protected array $fieldsToDuplicateCheck = [
-        EntityFilter::FLAT_DEFAULT->value => ["owner", "price", "title", "price", "pricePerMeter", "rooms"]
+        EntityFilter::FLAT_DEFAULT->value => ["owner", "price", "title", "pricePerMeter", "rooms"]
     ];
 }

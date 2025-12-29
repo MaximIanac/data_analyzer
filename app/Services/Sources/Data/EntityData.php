@@ -7,6 +7,7 @@ use App\Services\Sources\Enums\EntityFilter;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EntityData extends Data
 {
@@ -16,7 +17,7 @@ class EntityData extends Data
         public string               $title,
         public SourceClientType     $source,
         public EntityFilter         $filter_type,
-        public array                $data,
+        public SchemalessAttributes|array $data,
         public Carbon|Optional|null $external_last_update,
         public Carbon|Optional|null $created_at,
         public Carbon|Optional|null $updated_at,

@@ -24,7 +24,7 @@ class EntityRepository
             ->whereFilterType($entityData->filter_type);
 
         foreach ($fields as $field) {
-            $value = $entityData->$field ?? null;
+            $value = $entityData->data[$field] ?? null;
 
             if (is_null($value)) {
                 $fieldDoesNotExist = true;
@@ -34,13 +34,17 @@ class EntityRepository
             $query->where("data->{$field}", $value);
         }
 
+        $query->where('external_id', '!=', $entityData->external_id);
+
         if ($query->exists() && !$fieldDoesNotExist) {
             Log::channel('sources.entity')->debug(
-                '[{source}][{filter_type}] Entity already exists', [
-                'source'      => $entityData->source,
-                'filter_type' => $entityData->filter_type,
-                'entity'      => json_encode($entityData, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT),
-            ]);
+                '[{source}][{filter_type}] Entity already exists '.
+                json_encode(
+                    $entityData,
+                    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
+                ).
+                "\nEntities were found: " .  $query->get()->pluck('external_id')->implode(', ') . "\n"
+            );
 
             return null;
         }
