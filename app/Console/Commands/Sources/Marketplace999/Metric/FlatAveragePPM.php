@@ -4,7 +4,7 @@ namespace App\Console\Commands\Sources\Marketplace999\Metric;
 
 use App\Jobs\SendMessageToTelegram;
 use App\Models\Metric;
-use App\Services\Sources\Clients\Marketplace999\Actions\Metrics\PPM\CreateAvgPPMMetricAction;
+use App\Services\Sources\Clients\Marketplace999\Actions\Metrics\CreateAvgPpmMetricAction;
 use App\Services\Sources\Data\MetricData;
 use App\Services\Sources\Enums\EntityFilter;
 use App\Services\Sources\Enums\MetricFilter;
@@ -54,7 +54,7 @@ class FlatAveragePPM extends Command
             );
 
             /** @var Collection<MetricData> $metricCollect */
-            [$currOneRoomMetric, $currTwoRoomMetric] = (new CreateAvgPPMMetricAction())->handle();
+            [$currOneRoomMetric, $currTwoRoomMetric] = (new CreateAvgPpmMetricAction())->handle();
 
             $this->info("1 room average: {$currOneRoomMetric->value}");
             $this->info("2 rooms average: {$currTwoRoomMetric->value}");

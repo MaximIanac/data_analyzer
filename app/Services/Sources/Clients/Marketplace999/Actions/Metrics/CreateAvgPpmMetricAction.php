@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Sources\Clients\Marketplace999\Actions\Metrics\PPM;
+namespace App\Services\Sources\Clients\Marketplace999\Actions\Metrics;
 
 use App\Services\Repository\MetricRepository;
 use App\Services\Sources\Data\MetricData;
@@ -8,7 +8,7 @@ use App\Services\Sources\Enums\EntityFilter;
 use App\Services\Sources\Enums\MetricKey;
 use App\Services\Sources\Enums\SourceClientType;
 
-class CreateAvgPPMMetricAction
+class CreateAvgPpmMetricAction
 {
     /**
      * Calculate and creates new metrics about price per meter of flats
@@ -25,8 +25,12 @@ class CreateAvgPPMMetricAction
             "filter_type" => EntityFilter::FLAT_DEFAULT
         ];
 
-        $oneRoomAvg = (new CalcAveragePPMAction())->handle("Apartament cu 1 cameră");
-        $twoRoomsAvg = (new CalcAveragePPMAction())->handle("Apartament cu 2 camere");
+        $oneRoomAvg = (new CalcAverageAction())->handle("pricePerMeter",
+            "rooms","Apartament cu 1 cameră"
+        );
+        $twoRoomsAvg = (new CalcAverageAction())->handle("pricePerMeter",
+            "rooms","Apartament cu 2 camere"
+        );
 
         $metrics = [
             [MetricKey::FLAT_AVG_PPM_1ROOM, $oneRoomAvg, "1 room"],
