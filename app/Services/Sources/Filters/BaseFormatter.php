@@ -24,21 +24,21 @@ abstract class BaseFormatter implements FormatterInterface
     protected array $original;
 
     /** Related entity */
-    protected Entity $entity;
+    protected mixed $subject;
 
     /** Fields that should trigger notifications when entity was updated */
     protected array $watch = [];
 
     /**
-     * @param Entity $entity   Source entity
-     * @param array  $changes  Changed attributes
-     * @param array  $original Original attributes
+     * @param mixed $subject
+     * @param array $changes Changed attributes
+     * @param array $original Original attributes
      */
-    public function __construct(Entity $entity, array $changes = [], array $original = [])
+    public function __construct(mixed $subject, array $changes = [], array $original = [])
     {
         $this->changes = $changes;
         $this->original = $original;
-        $this->entity = $entity;
+        $this->subject = $subject;
         $this->data = new stdClass();
 
         $this->processData()
@@ -46,9 +46,9 @@ abstract class BaseFormatter implements FormatterInterface
             ->setBody();
     }
 
-    public static function make(Entity $entity): static
+    public static function make(mixed $subject): static
     {
-        return new static($entity);
+        return new static($subject);
     }
 
     /**

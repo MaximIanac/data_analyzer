@@ -25,7 +25,7 @@ class SendCreatedEntityListener
 
         $formatter = (new FormatterFactory())->make(
             $entity->source,
-            $entity->filter_type->value,
+            $entity->filter_type,
             $entity
         );
 

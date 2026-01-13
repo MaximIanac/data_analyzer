@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\EntityUpdated;
 use App\Jobs\SendMessageToTelegram;
-use App\Services\Sources\Clients\Marketplace999\Filters\Formatters\FlatDefaultFormatter;
+use App\Services\Sources\Clients\Marketplace999\Filters\Formatters\Entity\FlatDefaultFormatter;
 use App\Services\Sources\Filters\Factories\FormatterFactory;
 use Illuminate\Support\Facades\Log;
 
@@ -30,7 +30,7 @@ class SendUpdatedEntityListener
         /** @var FlatDefaultFormatter $formatter */
         $formatter = (new FormatterFactory())->make(
             $entity->source,
-            $entity->filter_type->value,
+            $entity->filter_type,
             $entity,
             $changes,
             $original,

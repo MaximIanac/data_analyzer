@@ -135,6 +135,13 @@ return [
                 'replace_placeholders' => true,
             ],
 
+            "metric" => [
+                'driver' => 'single',
+                'path' => storage_path('logs/sources/metrics.log'),
+                'level' => 'debug',
+                'replace_placeholders' => true,
+            ],
+
             'command' => [
                 'driver' => 'daily',
                 'days' => env('LOG_DAILY_DAYS', 7),

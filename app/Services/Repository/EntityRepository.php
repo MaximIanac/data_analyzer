@@ -4,6 +4,7 @@ namespace App\Services\Repository;
 
 use App\Models\Entity;
 use App\Services\Sources\Data\EntityData;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -37,14 +38,14 @@ class EntityRepository
         $query->where('external_id', '!=', $entityData->external_id);
 
         if ($query->exists() && !$fieldDoesNotExist) {
-            Log::channel('sources.entity')->debug(
-                "Entity already exists ".
-                json_encode(
-                    $entityData,
-                    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
-                ).
-                "\nEntities were found: " .  $query->get()->pluck('external_id')->implode(', ') . "\n"
-            );
+//            Log::channel('sources.entity')->debug(
+//                "Entity already exists " .
+//                json_encode(
+//                    $entityData,
+//                    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
+//                ) .
+//                "\nEntities were found: " . $query->get()->pluck('external_id')->implode(', ') . "\n"
+//            );
 
             return null;
         }
@@ -84,4 +85,14 @@ class EntityRepository
         }
     }
 
+    public function getAvgByField(Builder $context, string $field, string $whereType = "", string $whereValue = "", string $value_type = "float"): float
+    {
+        if (!empty($whereType) && !empty($whereValue)) {
+            $context = $context->where("data->{$whereType}", $whereValue);
+        }
+
+        $avg = $context->avg("data->{$field}");
+
+        return round((float) $avg, 2);
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Services\Sources\Filters\Factories;
 
+use App\Services\Sources\Enums\EntityFilter;
+use App\Services\Sources\Enums\MetricFilter;
 use App\Services\Sources\Enums\SourceClientType;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -11,16 +13,16 @@ abstract class BaseFactory
     protected string $baseNamespace = 'App\\Services\\Sources\\Clients';
 
     abstract protected function getClassSuffix(): string;
-    abstract protected function getSubDirectory(): string;
+    abstract protected function getSubDirectory(EntityFilter|MetricFilter $filter = null): string;
     abstract protected function getExpectedInterface(): string;
 
     public function make(
         SourceClientType $sourceType,
-        string $entityName,
+        EntityFilter|MetricFilter $filter,
         ...$params
     ): object
     {
-        $className = $this->buildClassName($sourceType, $entityName);
+        $className = $this->buildClassName($sourceType, $filter);
 
         if (!class_exists($className)) {
             throw new InvalidArgumentException("Class {$className} does not exist.");
@@ -35,20 +37,19 @@ abstract class BaseFactory
 
     protected function buildClassName(
         SourceClientType $sourceType,
-        string $entityName
+        EntityFilter|MetricFilter $filter,
     ): string
     {
         $sourceClassName = $this->formatSourceName($sourceType);
-        $entityClassName = $this->formatEntityName($entityName);
-
-        $subDir = $this->getSubDirectory() ? $this->getSubDirectory() . '\\' : '';
+        $factoryClassName = $this->formatFactoryClassName($filter);
+        $subDirPath = $this->getSubDirectory($filter);
 
         return sprintf(
-            '%s\\%s\\%s%s',
+            '%s\\%s\\%s\\%s',
             $this->baseNamespace,
             $sourceClassName,
-            $subDir,
-            $entityClassName
+            $subDirPath,
+            $factoryClassName
         );
     }
 
@@ -59,9 +60,9 @@ abstract class BaseFactory
             ->value();
     }
 
-    protected function formatEntityName(string $entityName): string
+    protected function formatFactoryClassName(EntityFilter|MetricFilter $filter): string
     {
-        return Str::of($entityName)
+        return Str::of($filter->value)
             ->studly()
             ->append($this->getClassSuffix())
             ->value();

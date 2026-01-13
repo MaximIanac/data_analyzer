@@ -3,22 +3,21 @@
 namespace App\Services\Sources\Data;
 
 use App\Services\Sources\Enums\EntityFilter;
+use App\Services\Sources\Enums\MetricKey;
 use App\Services\Sources\Enums\SourceClientType;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
-class EntityData extends Data
+class MetricData extends Data
 {
     public function __construct(
         public int|Optional         $id,
-        public string               $external_id,
-        public string               $title,
+        public MetricKey            $key,
         public SourceClientType     $source,
         public EntityFilter         $filter_type,
-        public SchemalessAttributes|array $data,
-        public Carbon|Optional|null $external_last_update,
+        public float                $value,
         public Carbon|Optional|null $created_at,
         public Carbon|Optional|null $updated_at,
     ) {}

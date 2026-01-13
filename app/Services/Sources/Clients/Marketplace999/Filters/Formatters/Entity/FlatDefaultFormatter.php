@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Sources\Clients\Marketplace999\Filters\Formatters;
+namespace App\Services\Sources\Clients\Marketplace999\Filters\Formatters\Entity;
 
 use App\Services\Sources\Filters\BaseFormatter;
 use stdClass;
@@ -13,7 +13,7 @@ class FlatDefaultFormatter extends BaseFormatter
 
     protected function processData(): static
     {
-        $entityData = $this->entity->data;
+        $entityData = $this->subject->data;
 
         $this->data = new stdClass();
         $this->data->price = '0 €';
@@ -35,7 +35,7 @@ class FlatDefaultFormatter extends BaseFormatter
             $this->data->discountAmount = $this->number($entityData->oldPrice - $entityData->price);
         }
         if (!$this->getWatchedChanges()) {
-            $this->data->timeText = $this->entity->data->reseted ? "🔄 *Обновлено*" : "🆕 *Новое*";
+            $this->data->timeText = $entityData->reseted ? "🔄 *Обновлено*" : "🆕 *Новое*";
         }
 
         return $this;
@@ -47,12 +47,12 @@ class FlatDefaultFormatter extends BaseFormatter
             ? "🔥 {$this->data->timeText}"
             : $this->data->timeText;
 
-        $title = mb_strlen($this->entity->title) > 100
-            ? mb_substr($this->entity->title, 0, 100) . '…'
-            : $this->entity->title;
+        $title = mb_strlen($this->subject->title) > 100
+            ? mb_substr($this->subject->title, 0, 100) . '…'
+            : $this->subject->title;
 
         $this->header = "$statusEmoji\n*{$title}*\n";
-        $this->header .= $this->addIf($this->data->area, "*%s* м² | ") . "*ID:* `{$this->entity->external_id}`";
+        $this->header .= $this->addIf($this->data->area, "*%s* м² | ") . "*ID:* `{$this->subject->external_id}`";
 
         return $this;
     }
@@ -78,13 +78,13 @@ class FlatDefaultFormatter extends BaseFormatter
 
         $this->body .= "\n";
 
-        $this->body .= $this->addIf($this->entity->data->rooms, "\n🏠 %s");
+        $this->body .= $this->addIf($this->subject->data->rooms, "\n🏠 %s");
         $this->body .= $this->addIf(
-            [$this->entity->data->floor, $this->entity->data->totalFloors],
+            [$this->subject->data->floor, $this->subject->data->totalFloors],
             "  •  *Этаж:* %s/%s"
         );
 
-        $this->body .= "\n\n🔗 [Открыть объявление]({$this->entity->data->url})";
+        $this->body .= "\n\n🔗 [Открыть объявление]({$this->subject->data->url})";
         $this->body .= "\n{$this->data->timeText}: " . now()->format('d.m H:i');
 
         return $this;

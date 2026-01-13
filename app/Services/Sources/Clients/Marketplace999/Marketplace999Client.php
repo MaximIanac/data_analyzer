@@ -36,7 +36,7 @@ class Marketplace999Client extends BaseClient
      */
     public function flatsSearch(EntityFilter $filter, int $skip): Collection
     {
-        $variableClass = (new VariableFactory)->make($this->type, $filter->value);
+        $variableClass = (new VariableFactory)->make($this->type, $filter);
         $data = $this->execute(
             'searchAds',
             'FlatsSearch',
